@@ -26,11 +26,18 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY web/package.json web/pnpm-lock.yaml ./web/
 RUN cd web && pnpm install --frozen-lockfile
 
-# --- App source ---
-COPY . .
-
-# --- Build the frontend (no runtime secrets needed at build time) ---
+# --- Frontend source + build, from web/ ONLY ---
+# Copying just web/ here (before the Python source) means a change to the Python
+# agent does NOT invalidate this layer, so `next build` is skipped on Python-only
+# redeploys. node_modules/.next are excluded via .dockerignore, so this copy keeps
+# the installed deps above and doesn't drag in local build output.
+COPY web/ ./web/
 RUN cd web && pnpm build
+
+# --- Python / agent source LAST ---
+# Changes here (the part we iterate on most) bust only this cheap copy layer, not
+# the frontend build above.
+COPY . .
 
 ENV PORT=3000
 EXPOSE 3000
