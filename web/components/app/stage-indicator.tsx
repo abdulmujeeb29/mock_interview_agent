@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { cn } from '@/lib/shadcn/utils';
 import { type InterviewStage, useInterviewStage } from '@/hooks/useInterviewStage';
+import { cn } from '@/lib/shadcn/utils';
 
 const STEPS: { key: Exclude<InterviewStage, null>; label: string }[] = [
   { key: 'intro', label: 'Introduction' },
@@ -140,7 +140,7 @@ export function StageIndicator() {
               'shadow-md',
               banner.timer
                 ? 'flex items-center gap-3 rounded-2xl bg-amber-500 px-5 py-2.5 text-white ring-4 ring-amber-500/25'
-                : 'rounded-full bg-foreground px-5 py-2 text-sm font-semibold text-background'
+                : 'bg-foreground text-background rounded-full px-5 py-2 text-sm font-semibold'
             )}
           >
             {banner.label === 'Complete' ? (
