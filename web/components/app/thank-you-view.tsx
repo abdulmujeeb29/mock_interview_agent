@@ -39,8 +39,8 @@ export const ThankYouView = ({
           transition={{ duration: 0.4, delay: 0.15, ease: 'easeOut' }}
           className="text-muted-foreground max-w-prose pt-2 leading-6"
         >
-          Thanks for your time — that wraps up the mock interview. You covered the
-          introduction and a past project. Feel free to run it again to practice more.
+          Thanks for your time — that wraps up the mock interview. You covered the introduction and
+          a past project. Feel free to run it again to practice more.
         </motion.p>
 
         <motion.div {...rise} transition={{ duration: 0.4, delay: 0.22, ease: 'easeOut' }}>
