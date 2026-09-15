@@ -57,7 +57,19 @@ async def start_avatar_if_enabled(
     if enabled is None:
         enabled = avatar_enabled()
     if not enabled:
+        logger.info("AVATAR: disabled (AVATAR_ENABLED not truthy) -> audio-only")
         return False
+
+    # Log the exact config we're about to use so a cloud failure is diagnosable.
+    pal = os.environ.get("TAVUS_PERSONA_ID") or os.environ.get("TAVUS_PAL_ID")
+    face = os.environ.get("TAVUS_REPLICA_ID") or os.environ.get("TAVUS_FACE_ID")
+    has_key = bool(os.environ.get("TAVUS_API_KEY"))
+    logger.info(
+        "AVATAR: enabled -> starting Tavus (api_key=%s, persona/pal=%s, replica/face=%s)",
+        "set" if has_key else "MISSING",
+        pal or "stock-default",
+        face or "stock-default",
+    )
 
     try:
         avatar = factory()
@@ -65,8 +77,15 @@ async def start_avatar_if_enabled(
         wait = getattr(avatar, "wait_for_join", None)
         if callable(wait):
             await wait()
-        logger.info("Tavus avatar started")
+        logger.info("AVATAR: Tavus started OK -> face + audio via Tavus track")
         return True
     except Exception as e:  # noqa: BLE001 - avatar must never break the interview
-        logger.warning("avatar disabled; falling back to audio-only (Tavus failed): %s", e)
+        # Full traceback + type at ERROR so the cloud logs reveal WHY (auth, plan
+        # limit, timeout, bad persona/replica) instead of silently degrading.
+        logger.error(
+            "AVATAR: Tavus FAILED (%s) -> falling back to audio-only. reason: %s",
+            type(e).__name__,
+            e,
+            exc_info=True,
+        )
         return False
