@@ -55,8 +55,8 @@ export const WelcomeView = ({
           className="text-muted-foreground max-w-prose pt-2 leading-6"
         >
           A short, voice-based practice interview with a live avatar. Two stages — a quick
-          introduction, then a past project. Speak naturally; it listens, follows up, and
-          moves on when it&apos;s heard enough.
+          introduction, then a past project. Speak naturally; it listens, follows up, and moves on
+          when it&apos;s heard enough.
         </motion.p>
 
         <motion.div {...rise} transition={{ duration: 0.4, delay: 0.2, ease: 'easeOut' }}>
