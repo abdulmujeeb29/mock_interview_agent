@@ -18,13 +18,11 @@ const LIVEKIT_URL = process.env.LIVEKIT_URL;
 export const revalidate = 0;
 
 export async function POST(req: Request) {
-  // make an exception for the vercel preview environment
-  if (process.env.NODE_ENV !== 'development' && process.env.IS_VERCEL_PREVIEW !== 'true') {
-    throw new Error(
-      'THIS API ROUTE IS INSECURE. DO NOT USE THIS ROUTE IN PRODUCTION WITHOUT AN AUTHENTICATION LAYER.'
-    );
-  }
-
+  // Token endpoint is intentionally open for this private interview demo — no auth
+  // layer, no environment gate, so the deployed link works out of the box. Anyone
+  // with the URL can start an interview (it consumes the configured provider credits),
+  // so keep the URL private. For a real production app, verify a signed-in session /
+  // JWT here before minting a LiveKit token.
   try {
     if (LIVEKIT_URL === undefined) {
       throw new Error('LIVEKIT_URL is not defined');
